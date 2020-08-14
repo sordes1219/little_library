@@ -1,0 +1,87 @@
+// Place all the styles related to the Books controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/* bookss/show ================================ */
+.book-show {
+  text-align: center;
+}
+
+.book {
+  margin-bottom: 20px;
+}
+
+.books-heading {
+  font-weight: 300;
+  margin: 60px 0 20px;
+  font-size: 48px;
+  color: #bcc8d4;
+}
+
+.book-contents {
+  float: right;
+}
+
+.book img {
+  width: 80px;
+  height: 80px;
+  border-radius: 40%;
+  box-shadow: 0 2px 6px #c1ced7;
+  margin: 20px 0 10px;
+  object-fit: cover;
+  float: left;
+}
+
+
+.book h2 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.book p {
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.book a {
+  color: #8899a6;
+  text-decoration: underline;
+  font-weight: 200;
+}
+
+.book span {
+  color: #afb6bf;
+  font-weight: 200;
+  padding: 0 6px 0 8px;
+}
+
+.book-tabs {
+  margin-top: 40px;
+  background-color: white;
+  overflow: hidden;
+  box-shadow: 0 2px 6px #c1ced7;
+}
+
+.book-tabs li {
+  float: left;
+}
+
+.book-tabs li.active {
+  border-bottom: 2px solid #3ecdc6;
+}
+
+.book-tabs li.active a {
+  color: #57575f;
+}
+
+.book-tabs a {
+  display: inline-block;
+  padding: 16px 30px;
+  color: #afb6bf;
+}
+
+/* users/new, users/edit ================================ */
+.books-form input {
+  margin-bottom: 15px;
+}

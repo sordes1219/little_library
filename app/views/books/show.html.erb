@@ -1,0 +1,18 @@
+<div class="main book-show">
+  <div class="container">
+    <h1 class="books-heading">どんなほん？</h1>
+    <div class="books-show-item">
+      <img src="<%= "/book_images/#{@book.image_url}" %>">
+      <div class="book-contents">
+        <h2><%= @book.name %></h2>
+        <p><%= @book.content %></p>
+        <%= form_tag("/books/#{@book.id}/rent") do %>
+          <input type="submit" value="かりる">
+        <% end %>
+        <%= form_tag("/books/#{@book.id}/putback") do %>
+          <input type="submit" value="かえす">
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

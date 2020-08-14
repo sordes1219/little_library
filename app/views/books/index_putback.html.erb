@@ -1,0 +1,19 @@
+<div class="main users-index">
+  <div class="container">
+    <h1 class="users-heading">どれをかりる？</h1>
+    <ul class="user-tabs">
+      <li class="active"><%= link_to("かりられる","/books/putback") %></li>
+      <li></li><%= link_to("かしだしちゅう","/books/rent") %></li>
+    </ul> 
+    <% @books.each do |book| %>
+      <div class="users-index-item">
+        <div class="user-left">
+          <img src="<%= "/book_images/#{book.image_url}" %>">
+        </div>
+        <div class="user-right">
+          <%= link_to(book.name, "/books/#{book.id}") %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
