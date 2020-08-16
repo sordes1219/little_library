@@ -1,19 +1,19 @@
 <div class="main">
   <div class="container">
-    ユーザ登録
+    本の更新
     <% if @book.errors.full_messages %>
       <% @book.errors.full_messages.each do |message| %>
         <%= message %>
       <% end %>
     <% end %>
-    <%= form_tag("/books/signup",{multipart:true}) do %>
+    <%= form_tag("/books/#{@book.id}/update",{multipart:true}) do %>
       <p>タイトル</p>
       <input name="name" value="<%= @name %>">
       <p>内容</p>
       <input name="content" value="<%= @content %>">
       <p>画像</p>
       <input name="image" type="file">
-      <input type="submit" value="新規登録">
+      <input type="submit" value="更新">
     <% end %>
   </div>
 </div>

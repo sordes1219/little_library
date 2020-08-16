@@ -1,0 +1,26 @@
+<div class="main users-index">
+  <div class="container">
+    <h1 class="users-heading">りようりれき</h1>
+    <ul class="user-tabs">
+      <li class="<%= "active" if @status=="rental" %>"><%= link_to("かりているほん","/users/#{@user_id}/rental") %></li>
+      <li class="<%= "active" if @status=="putback" %>"><%= link_to("かえしたほん","/users/#{@user_id}/putback") %></li>
+    </ul> 
+    <% @histories.each do |history| %>
+      <% book = Book.find_by(id: history.book_id) %>
+      <div class="users-index-item">
+        <div class="user-left">
+          <img src="<%= "/book_images/#{book.image_url}" %>">
+        </div>
+        <div class="user-right">
+          <%= link_to(book.name, "/books/#{book.id}") %>
+          <% if @status=="rental" %>
+            <p>かりたひ： <%= history.updated_at.month %>月<%= history.updated_at.day %>日</p>
+            <p>かえすひ： <%= history.updated_at.advance(days:7).month %>月<%= history.updated_at.advance(days:7).day %>日</p>
+          <% else %>
+            <p>かえしたひ： <%= history.updated_at.month %>月<%= history.updated_at.day %>日</p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

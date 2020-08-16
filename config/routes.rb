@@ -9,10 +9,9 @@ Rails.application.routes.draw do
   post '/books/:book_id/update' => 'books#update'
   get '/books/:book_id/update' => 'books#update_form'
   post '/books/:book_id/delete' => 'books#delete'
-  get '/books/rent' => 'books#index_rent'
-  get '/books/putback' => 'books#index_putback'
+  get '/books/:status/index' => 'books#index'
   get '/books/:book_id' => 'books#show'
-  post '/books/:book_id/rent' => 'books#rent'
+  post '/books/:book_id/rental' => 'books#rental'
   post '/books/:book_id/putback' => 'books#putback'
   
   post '/users/signup' => 'users#signup'
@@ -21,9 +20,8 @@ Rails.application.routes.draw do
   get '/users/:user_id/update' => 'users#update_form'
   post '/users/:user_id/delete' => 'users#delete'
   get '/users/:group/index' => 'users#index'
-  get '/users/:user_id/rent' => 'users#index_rent'
-  get '/users/:user_id/putback' => 'users#index_putback'
-
+  get '/users/:user_id/:status' => 'users#book_status'
+  
   get '' => "home#top"
   
 end

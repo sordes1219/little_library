@@ -1,13 +1,8 @@
 class UsersController < ApplicationController
-
-  def index_rent
-    @histories = History.where(user_id:@current_user.id,status:"rental")
-  end
   
-  def index_putback
-    @histories = History.where(user_id:@current_user.id,status:"putback")
-  end
-  
+  before_action :authenticate_user,{only:[:logout,:signup,:signup_form,:update_form,:update,:delete,:book_status,:index]}
+  before_action :forbid_login_user,{only:[:login,:login_form]}
+    
   def login_form
   end
   
@@ -16,7 +11,7 @@ class UsersController < ApplicationController
     if @user && @user.authenticate(params[:password])
       session[:user_id] = @user.id
       flash[:notice] = "ログインしました"
-      redirect_to("/books/putback")
+      redirect_to("/books/putback/index")
     else
       @error_message = "メールアドレスかパスワードが間違っています"
       @email = params[:email]
@@ -102,6 +97,12 @@ class UsersController < ApplicationController
       flash[:notice] = "ユーザを削除できませんでした"
       redirect_to("/users/#{group}/index")
     end
+  end
+  
+  def book_status
+    @user_id = params[:user_id].to_i
+    @status = params[:status]
+    @histories = History.where(user_id:@user_id,status:@status)
   end
   
   def index

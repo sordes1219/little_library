@@ -15,7 +15,7 @@
           <img src="<%= "/user_images/#{user.image_url}" %>">
         </div>
         <div class="user-right">
-          <%= link_to(user.name, "/users/#{user.id}/rent") %>
+          <%= link_to(user.name, "/users/#{user.id}/rental") %>
           <%= link_to('編集', "/users/#{user.id}/update") %>
           <%= link_to('削除', "/users/#{user.id}/delete",{method: "post"}) %>
         </div>

@@ -1,28 +1,26 @@
 class BooksController < ApplicationController
   
-  def index_rent
-    book_id_list = []
-    histories = History.where(status:"rental")
-    histories.each do |history|
-      book_id_list.push(history.book_id)
-    end
-    @books = Book.where(id: book_id_list)
-  end
+  before_action :authenticate_user
   
-  def index_putback
+  def index
     book_id_list = []
-    histories = History.where(status:"rental")
+    @status = params[:status]
+    histories = History.where(status: "rental")
     histories.each do |history|
       book_id_list.push(history.book_id)
     end
-    @books = Book.where.not(id: book_id_list)
+    if @status == "rental"
+      @books = Book.where(id: book_id_list)
+    else
+      @books = Book.where.not(id: book_id_list)
+    end
   end
   
   def show
     @book = Book.find_by(id: params[:book_id])
   end
   
-  def rent
+  def rental
     if History.find_by(book_id: params[:book_id],status:"rental")
       flash[:notice] = "このほんは、かしだしちゅうです"
       redirect_to("/books/#{params[:book_id]}")
@@ -64,7 +62,7 @@ class BooksController < ApplicationController
         @book.save
       end
       flash[:notice] = "本を登録しました"
-      redirect_to("/books/putback")
+      redirect_to("/books/putback/index")
     else
       render("/books/signup_form")
     end
@@ -89,7 +87,7 @@ class BooksController < ApplicationController
         File.binwirte("public/book_images/#{image_url}",image.read)
       end
       flash[:notice] = "本の情報を更新しました"
-      redirect_to("/books/putback")
+      redirect_to("/books/putback/index")
     else
       render("books/update_form")
     end

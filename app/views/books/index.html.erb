@@ -2,8 +2,8 @@
   <div class="container">
     <h1 class="users-heading">どれをかりる？</h1>
     <ul class="user-tabs">
-      <li><%= link_to("かりられる","/books/putback") %></li>
-      <li class="active"><%= link_to("かしだしちゅう","/books/rent") %></li>
+      <li class="<%= "active" if @status=="putback" %>" ><%= link_to("かりられる","/books/putback/index") %></li>
+      <li class="<%= "active" if @status=="rental" %>" ><%= link_to("かしだしちゅう","/books/rental/index") %></li>
     </ul> 
     <% @books.each do |book| %>
       <div class="users-index-item">
@@ -12,7 +12,11 @@
         </div>
         <div class="user-right">
           <%= link_to(book.name, "/books/#{book.id}") %>
-          <%= if @current_user.admin == true %>
+          <% if @current_user.admin == true %>
+            <% if @status == "rental" %>
+              <p>貸出先：<%= book.rentaler %></p>
+              <p>返却予定日：<%= book.putback_date %></p>
+            <% end %>
             <%= link_to("編集", "/books/#{book.id}/update") %>
             <%= link_to("削除", "/books/#{book.id}/delete") %>
           <% end %>

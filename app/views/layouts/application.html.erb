@@ -25,7 +25,7 @@
             <%= link_to("本の登録","/books/signup") %>
           </li>
           <li>
-            <%= link_to("本の一覧","/books/putback") %>
+            <%= link_to("本の一覧","/books/putback/index") %>
           </li>
           <li>
             <%= link_to("ログアウト","/logout", {method: "post"}) %>
@@ -34,13 +34,13 @@
       <% elsif @current_user && @current_user.admin != true%>
         <ul class="header-menus">
           <li>
-            <%= link_to(@current_user.name,"/users/#{@current_user.id}/rent") %>
+            <%= link_to(@current_user.name,"/users/#{@current_user.id}/putback") %>
           </li>
           <li>
-            <%= link_to("かりる","/books/putback") %>
+            <%= link_to("かりる","/books/putback/index") %>
           </li>
           <li>
-            <%= link_to("かえす","/users/#{@current_user.id}/rent") %>
+            <%= link_to("かえす","/users/#{@current_user.id}/rental") %>
           </li>
           <li>
             <%= link_to("ログアウト","/logout", {method: "post"}) %>
