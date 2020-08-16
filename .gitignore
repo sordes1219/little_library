@@ -21,3 +21,7 @@
 /yarn-error.log
 
 .byebug_history
+
+/public/book_images/*
+/public/user_images/*
+
