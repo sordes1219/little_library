@@ -16,13 +16,13 @@
       <% if @current_user && @current_user.admin == true %>
         <ul class="header-menus">
           <li>
-            <%= link_to("ユーザ登録","/users/new") %>
+            <%= link_to("ユーザ登録","/users/signup") %>
           </li>
           <li>
-            <%= link_to("ユーザ一覧","/users/index") %>
+            <%= link_to("ユーザ一覧","/users/taiyo/index") %>
           </li>
           <li>
-            <%= link_to("本の登録","/books/new") %>
+            <%= link_to("本の登録","/books/signup") %>
           </li>
           <li>
             <%= link_to("本の一覧","/books/putback") %>

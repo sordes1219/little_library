@@ -46,5 +46,65 @@ class BooksController < ApplicationController
       redirect_to("/books/#{params[:book_id]}")
     end
   end
+  
+  def signup_form
+    @book = Book.new
+  end
 
+  def signup
+    @name = params[:name]
+    @content = params[:content]
+    @book = Book.new(name: @name,content: @content)
+    if @book.save
+      if params[:image]
+        image = params[:image]
+        image_url = "#{@book.id}.jpg"
+        File.binwirte("public/book_images/#{image_url}",image.read)
+        @book.image_url = image_url
+        @book.save
+      end
+      flash[:notice] = "本を登録しました"
+      redirect_to("/books/putback")
+    else
+      render("/books/signup_form")
+    end
+  end
+  
+  def update_form
+    @book = Book.find_by(id: params[:book_id])
+    @name = @book.name
+    @content = @book.content
+  end
+  
+  def update
+    @name = params[:name]
+    @content = params[:content]
+    @book = Book.find_by(id:params[:book_id])
+    @book.name = @name
+    @book.content = @content
+    if @book.save
+      if params[:image]
+        image = params[:image]
+        image_url = "#{@book.id}.jpg"
+        File.binwirte("public/book_images/#{image_url}",image.read)
+      end
+      flash[:notice] = "本の情報を更新しました"
+      redirect_to("/books/putback")
+    else
+      render("books/update_form")
+    end
+  end
+  
+  def delete
+    book = Book.find_by(id: params[:book_id])
+    histories = History.where(book_id: params[:book_id])
+    if book.delete && histories.delete_all
+      flash[:notice] = "本の情報を削除しました"
+      redirect_to("/books/putback")
+    else
+      flash[:notice] = "本の情報を削除できませんでした"
+      redirect_to("/books/putback")
+    end
+  end
+  
 end

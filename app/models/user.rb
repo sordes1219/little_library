@@ -5,6 +5,5 @@ class User < ApplicationRecord
   validates :name,{presence: true}
   validates :group,{presence: true}
   validates :email,{presence: true,uniqueness: true}
-  validates :admin,{presence: true}
   
 end

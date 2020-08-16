@@ -1,0 +1,25 @@
+<div class="main users-index">
+  <div class="container">
+    <h1 class="users-heading">ユーザ一覧</h1>
+    <ul class="user-tabs">
+      <li class="<%= "active" if @group == "taiyo" %>"><%= link_to("たいよう","/users/taiyo/index") %></li>
+      <li class="<%= "active" if @group == "sora" %>"><%= link_to("そら","/users/sora/index") %></li>
+      <li class="<%= "active" if @group == "umi" %>"><%= link_to("うみ","/users/umi/index") %></li>
+      <li class="<%= "active" if @group == "soyokaze" %>"><%= link_to("そよかぜ","/users/soyokaze/index") %></li>
+      <li class="<%= "active" if @group == "futaba" %>"><%= link_to("ふたば","/users/futaba/index") %></li>
+      <li class="<%= "active" if @group == "daichi" %>"><%= link_to("だいち","/users/daichi/index") %></li>
+    </ul> 
+    <% @users.each do |user| %>
+      <div class="users-index-item">
+        <div class="user-left">
+          <img src="<%= "/user_images/#{user.image_url}" %>">
+        </div>
+        <div class="user-right">
+          <%= link_to(user.name, "/users/#{user.id}/rent") %>
+          <%= link_to('編集', "/users/#{user.id}/update") %>
+          <%= link_to('削除', "/users/#{user.id}/delete",{method: "post"}) %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

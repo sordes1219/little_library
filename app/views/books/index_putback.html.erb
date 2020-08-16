@@ -12,6 +12,10 @@
         </div>
         <div class="user-right">
           <%= link_to(book.name, "/books/#{book.id}") %>
+          <%= if @current_user.admin == true %>
+            <%= link_to("編集", "/books/#{book.id}/update") %>
+            <%= link_to("削除", "/books/#{book.id}/delete") %>
+          <% end %>
         </div>
       </div>
     <% end %>
