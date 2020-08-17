@@ -7,6 +7,7 @@
   margin: 60px 0 20px;
   font-size: 48px;
   color: #bcc8d4;
+  text-align: center;
 }
 
 .users-index-item {
@@ -45,6 +46,11 @@
   text-align: left;
   display: table-cell;
   vertical-align: middle;
+}
+
+.user-right-bottom {
+  margin-top: 8px;
+  font-size: 14px;
 }
 
 /* users/show ================================ */
