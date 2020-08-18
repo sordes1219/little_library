@@ -1,19 +1,23 @@
 <div class="main">
   <div class="container">
-    本の更新
-    <% if @book.errors.full_messages %>
-      <% @book.errors.full_messages.each do |message| %>
-        <%= message %>
-      <% end %>
-    <% end %>
-    <%= form_tag("/books/#{@book.id}/update",{multipart:true}) do %>
-      <p>タイトル</p>
-      <input name="name" value="<%= @name %>">
-      <p>内容</p>
-      <input name="content" value="<%= @content %>">
-      <p>画像</p>
-      <input name="image" type="file">
-      <input type="submit" value="更新">
-    <% end %>
+    <div class="form-heading">本の更新</div>
+    <div class="form">
+      <div class="form-body">
+        <% if @book.errors.full_messages %>
+          <% @book.errors.full_messages.each do |message| %>
+            <%= message %>
+          <% end %>
+        <% end %>
+        <%= form_tag("/books/#{@book.id}/update",{multipart:true}) do %>
+          <p>タイトル</p>
+          <input name="name" value="<%= @name %>">
+          <p>内容</p>
+          <input name="content" value="<%= @content %>">
+          <p>画像</p>
+          <input name="image" type="file">
+          <input type="submit" value="更新">
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

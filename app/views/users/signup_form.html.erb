@@ -1,23 +1,34 @@
 <div class="main">
   <div class="container">
-    ユーザ登録
-    <% if @user.errors.full_messages %>
-      <% @user.errors.full_messages.each do |message| %>
-        <%= message %>
-      <% end %>
-    <% end %>
-    <%= form_tag("/users/signup",{multipart:true}) do %>
-      <p>名前</p>
-      <input name="name" value="<%= @name %>">
-      <p>グループ</p>
-      <input name="group" value="<%= @group %>">
-      <p>メールアドレス</p>
-      <input name="email" value="<%= @email %>">
-      <p>パスワード</p>
-      <input name="password" type="password" value="<%= @password %>">
-      <p>画像</p>
-      <input name="image" type="file">
-      <input type="submit" value="新規登録">
-    <% end %>
+    <div class="form-heading">ユーザ登録</div>
+    <div class="form">
+      <div class="form-body">
+        <% if @user.errors.full_messages %>
+          <% @user.errors.full_messages.each do |message| %>
+            <%= message %>
+          <% end %>
+        <% end %>
+        <%= form_tag("/users/signup",{multipart:true}) do %>
+          <p>名前</p>
+          <input name="name" value="<%= @name %>">
+          <p>グループ</p>
+          <select name="group" value="<%= @group %>">
+            <option value="taiyo">たいよう</option>
+            <option value="sora">そら</option>
+            <option value="umi">うみ</option>
+            <option value="futaba">ふたば</option>
+            <option value="soyokaze">そよかぜ</option>
+            <option value="daichi">だいち</option>
+          </select>
+          <p>メールアドレス</p>
+          <input name="email" value="<%= @email %>">
+          <p>パスワード</p>
+          <input name="password" type="password" value="<%= @password %>">
+          <p>画像</p>
+          <input name="image" type="file">
+          <input type="submit" value="新規登録">
+        <% end %>    
+      </div>
+    </div>
   </div>
 </div>

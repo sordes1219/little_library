@@ -53,7 +53,7 @@ body {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 750px;
   margin: 60px auto;
   padding-left: 15px;
   padding-right: 15px;
@@ -98,6 +98,10 @@ header {
   float: left;
   font-size: 13px;
   color: white;
+}
+
+.header-menus a:hover {
+  color: #ccffff;
 }
 
 .header-menus .fa {
@@ -192,6 +196,17 @@ header {
 }
 
 .form input {
+  width: 100%;
+  border: 1px solid #d8dadf;
+  padding: 10px;
+  color: #57575f;
+  font-size: 16px;
+  letter-spacing: 2px;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+.form select {
   width: 100%;
   border: 1px solid #d8dadf;
   padding: 10px;

@@ -28,7 +28,7 @@ class BooksController < ApplicationController
       history = History.new(user_id: @current_user.id,book_id: params[:book_id],status:"rental")
       history.save
       flash[:notice] = "このほんをかりました。かしだしきかんは１しゅうかんです"
-      redirect_to("/books/#{params[:book_id]}")
+      redirect_to("/users/#{@current_user.id}/rental")
     end
   end
   
@@ -38,7 +38,7 @@ class BooksController < ApplicationController
       history.status = "putback"
       history.save
       flash[:notice] = "ありがとう！ほんは、ほんだなにもどしておいてね"
-      redirect_to("/books/#{params[:book_id]}")
+      redirect_to("/users/#{@current_user.id}/putback")
     else
       flash[:notice] = "このほんは、かりていません"
       redirect_to("/books/#{params[:book_id]}")
@@ -96,6 +96,7 @@ class BooksController < ApplicationController
   def delete
     book = Book.find_by(id: params[:book_id])
     histories = History.where(book_id: params[:book_id])
+    File.delete("public/book_images/#{book.image_url}")
     if book.delete && histories.delete_all
       flash[:notice] = "本の情報を削除しました"
       redirect_to("/books/putback")

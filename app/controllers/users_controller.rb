@@ -90,6 +90,7 @@ class UsersController < ApplicationController
     user = User.find_by(id: params[:user_id])
     histories = History.where(user_id: params[:user_id])
     group = user.group
+    File.delete("public/user_images/#{user.image_url}")
     if user.delete && histories.delete_all
       flash[:notice] = "ユーザを削除しました"
       redirect_to("/users/#{group}/index")

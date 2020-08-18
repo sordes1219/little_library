@@ -16,8 +16,10 @@
         </div>
         <div class="user-right">
           <%= link_to(user.name, "/users/#{user.id}/rental") %>
-          <%= link_to('編集', "/users/#{user.id}/update") %>
-          <%= link_to('削除', "/users/#{user.id}/delete",{method: "post"}) %>
+          <div class="user-right-right">
+            <%= link_to('編集', "/users/#{user.id}/update") %>
+            <%= link_to('削除', "/users/#{user.id}/delete",{method: "post"}) %>  
+          </div>
         </div>
       </div>
     <% end %>

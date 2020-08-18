@@ -22,6 +22,6 @@ Rails.application.routes.draw do
   get '/users/:group/index' => 'users#index'
   get '/users/:user_id/:status' => 'users#book_status'
   
-  get '' => "home#top"
+  get '/' => "home#top"
   
 end
