@@ -23,7 +23,7 @@
           </div>
             <div class="user-right-right">
               <%= link_to("編集", "/books/#{book.id}/update") %>
-              <%= link_to("削除", "/books/#{book.id}/delete") %>
+              <%= link_to("削除", "/books/#{book.id}/delete",{method: "post"}) %>
             </div>
             <% end %>
         </div>
