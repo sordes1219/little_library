@@ -57,7 +57,7 @@ class BooksController < ApplicationController
       if params[:image]
         image = params[:image]
         image_url = "#{@book.id}.jpg"
-        File.binwirte("public/book_images/#{image_url}",image.read)
+        File.binwrite("public/book_images/#{image_url}",image.read)
         @book.image_url = image_url
         @book.save
       end
@@ -84,7 +84,7 @@ class BooksController < ApplicationController
       if params[:image]
         image = params[:image]
         image_url = "#{@book.id}.jpg"
-        File.binwirte("public/book_images/#{image_url}",image.read)
+        File.binwrite("public/book_images/#{image_url}",image.read)
       end
       flash[:notice] = "本の情報を更新しました"
       redirect_to("/books/putback/index")
