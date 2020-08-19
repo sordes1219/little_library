@@ -36,22 +36,30 @@
 }
 
 .user-left {
-  float: left;
+  display: table-cell;
   width: 10%;
 }
 
 .user-right {
+  display: table-cell;
   width: 90%;
   padding-left: 25px;
   text-align: left;
-  display: table-cell;
   vertical-align: middle;
+}
+
+.user-right-left {
+  width: 80%;
+  float: left;
 }
 
 .user-right-right {
   width: 20%;
   float: right;
-  justify-content: space-between;
+}
+
+.user-right-right a {
+  text-decoration: underline;
 }
 
 .user-right-bottom {
@@ -112,7 +120,7 @@
 }
 
 .user-tabs li.active {
-  border-bottom: 2px solid #3ecdc6;
+  border-bottom: 2px solid #6060ff;
 }
 
 .user-tabs li.active a {

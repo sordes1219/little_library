@@ -11,7 +11,7 @@ class BooksController < ApplicationController
     end
     if @status == "rental"
       @books = Book.where(id: book_id_list)
-    else
+    elsif @status == "putback"
       @books = Book.where.not(id: book_id_list)
     end
   end
