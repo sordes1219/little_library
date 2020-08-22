@@ -21,4 +21,9 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def user_group_normalization(param)
+    group_list = ["taiyo","sora","umi","futaba","soyokaze","daichi"]
+    return group_list.grep(param).first
+  end
+  
 end

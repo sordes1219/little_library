@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   
   before_action :authenticate_user,{only:[:logout,:signup,:signup_form,:update_form,:update,:delete,:book_status,:index]}
   before_action :forbid_login_user,{only:[:login,:login_form]}
-    
+  
   def login_form
   end
   
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
   
   def signup
     @name = params[:name]
-    @group = params[:group]
+    @group = user_group_normalization(params[:group])
     @email = params[:email]
     @password = params[:password]
     admin = false
@@ -56,14 +56,14 @@ class UsersController < ApplicationController
   def update_form
     @user = User.find_by(id:params[:user_id])
     @name = @user.name
-    @group = @user.group
+    @group = user_group_normalization(params[:group])
     @email = @user.email
     @password = @user.password
   end
   
   def update
     @name = params[:name]
-    @group = params[:group]
+    @group = user_group_normalization(params[:group])
     @email = params[:email]
     @password = params[:password]
     @user = User.find_by(id:params[:user_id])
@@ -107,7 +107,7 @@ class UsersController < ApplicationController
   end
   
   def index
-    @group = params[:group]
+    @group = user_group_normalization(params[:group])
     @users = User.where(group:@group)
   end
 
