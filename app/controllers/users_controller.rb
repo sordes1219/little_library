@@ -2,20 +2,23 @@ class UsersController < ApplicationController
   
   before_action :authenticate_user,{only:[:logout,:signup,:signup_form,:update_form,:update,:delete,:book_status,:index]}
   before_action :forbid_login_user,{only:[:login,:login_form]}
+  before_action :user_params_sanitize,{only:[:login,:signup,:update,:index]}
+  before_action :user_id_sanitize,{only:[:update_form,:update,:delete,:book_status]}
+  before_action :user_group_sanitize,{only:[:signup,:update,:index]}
+  before_action :book_status_sanitize,{only:[:book_status]}
+  
   
   def login_form
   end
   
   def login
-    @user = User.find_by(email:params[:email])
-    if @user && @user.authenticate(params[:password])
+    @user = User.find_by(email: @email)
+    if @user && @user.authenticate(@password)
       session[:user_id] = @user.id
       flash[:notice] = "ログインしました"
       redirect_to("/books/putback/index")
     else
       @error_message = "メールアドレスかパスワードが間違っています"
-      @email = params[:email]
-      @password = params[:password]
       render("users/login_form")
     end
   end
@@ -31,12 +34,7 @@ class UsersController < ApplicationController
   end
   
   def signup
-    @name = params[:name]
-    @group = user_group_normalization(params[:group])
-    @email = params[:email]
-    @password = params[:password]
-    admin = false
-    @user = User.new(name:@name,group:@group,email:@email,password:@password,admin:admin)
+    @user = User.new(name: @name,group: @group,email: @email,password: @password,admin: false)
     
     if @user.save
       if params[:image]
@@ -54,19 +52,15 @@ class UsersController < ApplicationController
   end
   
   def update_form
-    @user = User.find_by(id:params[:user_id])
+    @user = User.find_by(id: @user_id)
     @name = @user.name
-    @group = user_group_normalization(params[:group])
+    @group = @user.group
     @email = @user.email
     @password = @user.password
   end
   
   def update
-    @name = params[:name]
-    @group = user_group_normalization(params[:group])
-    @email = params[:email]
-    @password = params[:password]
-    @user = User.find_by(id:params[:user_id])
+    @user = User.find_by(id: @user_id)
     @user.name = @name
     @user.group = @group
     @user.email = @email
@@ -87,10 +81,12 @@ class UsersController < ApplicationController
   end
   
   def delete
-    user = User.find_by(id: params[:user_id])
-    histories = History.where(user_id: params[:user_id])
+    user = User.find_by(id: @user_id)
+    histories = History.where(user_id: @user_id)
     group = user.group
-    File.delete("public/user_images/#{user.image_url}")
+    if user.image_url
+      File.delete("public/user_images/#{user.image_url}")
+    end
     if user.delete && histories.delete_all
       flash[:notice] = "ユーザを削除しました"
       redirect_to("/users/#{group}/index")
@@ -101,14 +97,16 @@ class UsersController < ApplicationController
   end
   
   def book_status
-    @user_id = params[:user_id].to_i
-    @status = params[:status]
-    @histories = History.where(user_id:@user_id,status:@status)
+    if @current_user.admin == true || @current_user.id == @user_id.to_i
+      @histories = History.where(user_id: @user_id,status: @status)
+    else
+      flash[:notice] = "閲覧権限がありません"
+      @histories = []
+    end
   end
   
   def index
-    @group = user_group_normalization(params[:group])
-    @users = User.where(group:@group)
+    @users = User.where(group: [@group])
   end
 
 end

@@ -13,14 +13,14 @@
         <div class="user-right">
           <div class="user-right-left">
             <%= link_to(book.name, "/books/#{book.id}") %>
-            <% if @current_user.admin == true && @status == "rental"%>
+            <% if @current_user.admin == true && @status == "rental" %>
               <div class="user-right-bottom">
                 <p>貸出先：<%= book.rentaler %></p>
                 <p>返却予定日：<%= book.putback_date %></p>
               </div>
             <% end %>
           </div>
-            <% if @current_user.admin == true && @status == "rental"%>
+            <% if @current_user.admin == true %>
               <div class="user-right-right">
                 <%= link_to("編集", "/books/#{book.id}/update") %>
                 <%= link_to("削除", "/books/#{book.id}/delete",{method: "post"}) %>

@@ -21,9 +21,60 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def user_group_normalization(param)
-    group_list = ["taiyo","sora","umi","futaba","soyokaze","daichi"]
-    return group_list.grep(param).first
+  def user_params_sanitize
+    @name = view_context.sanitize(params[:name])
+    @group = view_context.sanitize(params[:group])
+    @email = view_context.sanitize(params[:email])
+    @password = view_context.sanitize(params[:password])
+  end
+  
+  def book_params_sanitize
+    @name = view_context.sanitize(params[:name])
+    @content = view_context.sanitize(params[:content])
+  end
+  
+  def user_group_sanitize
+    whitelist = ["taiyo","sora","umi","futaba","soyokaze","daichi"]
+    if whitelist.grep(params[:group]).first
+      @group = whitelist.grep(params[:group]).first
+    else
+      @group = "taiyo"
+    end
+  end
+  
+  def book_status_sanitize
+    whitelist = ["rental","putback"]
+    if whitelist.grep(params[:status]).first
+      @status = whitelist.grep(params[:status]).first
+    else
+      @status = "rental"
+    end
+  end
+  
+  def user_id_sanitize
+    if params[:user_id].match(/\A[0-9]+\z/)
+      @user_id = params[:user_id]
+    else
+      @user_id = nil
+    end
+  end
+  
+  def book_id_sanitize
+    if params[:book_id].match(/\A[0-9]+\z/)
+      @book_id = params[:book_id]
+    else
+      @book_id = nil
+    end
+  end
+  
+  def book_find_by_id(book_id)
+    book = Book.find_by(id: book_id)
+    if book == nil
+      flash[:notice] = "不正な値です"
+      redirect_to("/")
+    else
+      return book
+    end
   end
   
 end
