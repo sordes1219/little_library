@@ -4,6 +4,7 @@ class BooksController < ApplicationController
   before_action :book_params_sanitize,{only:[:update]}
   before_action :book_status_sanitize,{only:[:index]}
   before_action :book_id_sanitize,{only:[:show,:rental,:putback,:update_form,:update,:delete]}
+  before_action :book_find_by_id,{only:[:show,:rental,:putback,:update_form,:update,:delete]}
   
   def index
     book_id_list = []
@@ -12,18 +13,16 @@ class BooksController < ApplicationController
       book_id_list.push(history.book_id)
     end
     if @status == "rental"
-      @books = Book.where(id: book_id_list)
+      @books = Book.where(id: [book_id_list])
     elsif @status == "putback"
-      @books = Book.where.not(id: book_id_list)
+      @books = Book.where.not(id: [book_id_list])
     end
   end
   
   def show
-    @book = book_find_by_id(@book_id)
   end
   
   def rental
-    book_find_by_id(@book_id)
     if History.find_by(book_id: @book_id,status:"rental")
       flash[:notice] = "このほんは、かしだしちゅうです"
       redirect_to("/books/#{@book_id}")
@@ -36,7 +35,6 @@ class BooksController < ApplicationController
   end
   
   def putback
-    book_find_by_id(@book_id)
     history = History.find_by(user_id: @current_user.id,book_id: @book_id,status:"rental")
     if history
       history.status = "putback"
@@ -73,13 +71,11 @@ class BooksController < ApplicationController
   end
   
   def update_form
-    @book = Book.find_by(id: @book_id)
     @name = @book.name
     @content = @book.content
   end
   
   def update
-    @book = Book.find_by(id: @book_id)
     @book.name = @name
     @book.content = @content
     if @book.save
@@ -96,12 +92,11 @@ class BooksController < ApplicationController
   end
   
   def delete
-    book = Book.find_by(id: @book_id)
     histories = History.where(book_id: [@book_id])
-    if book.image_url
-      File.delete("public/book_images/#{book.image_url}")
+    if @book.image_url
+      File.delete("public/book_images/#{@book.image_url}")
     end
-    if book.delete && histories.delete_all
+    if @book.delete && histories.delete_all
       flash[:notice] = "本の情報を削除しました"
       redirect_to("/books/putback/index")
     else

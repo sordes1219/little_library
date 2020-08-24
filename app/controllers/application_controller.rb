@@ -67,13 +67,19 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def book_find_by_id(book_id)
-    book = Book.find_by(id: book_id)
-    if book == nil
+  def book_find_by_id
+    @book = Book.find_by(id: @book_id)
+    if @book == nil
       flash[:notice] = "不正な値です"
       redirect_to("/")
-    else
-      return book
+    end
+  end
+  
+  def user_find_by_id
+    @user = User.find_by(id: @user_id)
+    if @user == nil
+      flash[:notice] = "不正な値です"
+      redirect_to("/")
     end
   end
   

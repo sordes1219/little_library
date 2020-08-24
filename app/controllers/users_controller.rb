@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   before_action :user_id_sanitize,{only:[:update_form,:update,:delete,:book_status]}
   before_action :user_group_sanitize,{only:[:signup,:update,:index]}
   before_action :book_status_sanitize,{only:[:book_status]}
-  
+  before_action :user_find_by_id,{only:[:update_form,:update,:delete]}
   
   def login_form
   end
@@ -52,7 +52,6 @@ class UsersController < ApplicationController
   end
   
   def update_form
-    @user = User.find_by(id: @user_id)
     @name = @user.name
     @group = @user.group
     @email = @user.email
@@ -60,7 +59,6 @@ class UsersController < ApplicationController
   end
   
   def update
-    @user = User.find_by(id: @user_id)
     @user.name = @name
     @user.group = @group
     @user.email = @email
@@ -81,13 +79,12 @@ class UsersController < ApplicationController
   end
   
   def delete
-    user = User.find_by(id: @user_id)
-    histories = History.where(user_id: @user_id)
-    group = user.group
-    if user.image_url
-      File.delete("public/user_images/#{user.image_url}")
+    histories = History.where(user_id: [@user_id])
+    group = @user.group
+    if @user.image_url
+      File.delete("public/user_images/#{@user.image_url}")
     end
-    if user.delete && histories.delete_all
+    if @user.delete && histories.delete_all
       flash[:notice] = "ユーザを削除しました"
       redirect_to("/users/#{group}/index")
     else
@@ -98,7 +95,7 @@ class UsersController < ApplicationController
   
   def book_status
     if @current_user.admin == true || @current_user.id == @user_id.to_i
-      @histories = History.where(user_id: @user_id,status: @status)
+      @histories = History.where(user_id: [@user_id],status: [@status])
     else
       flash[:notice] = "閲覧権限がありません"
       @histories = []
