@@ -4,7 +4,9 @@
     <div class="book">
       <div class="books-show-item">
         <div class="book-left">
-          <img src="<%= "/book_images/#{@book.image_url}" %>">
+          <% if @book.image_url %>
+            <%= image_tag("book_images/#{@book.image_url}") %>
+          <% end %>
         </div>
         <div class="book-right">
           <div class="book-title">
@@ -13,7 +15,7 @@
           <div class="book-content">
             <p><%= @book.content %></p>
           </div>
-          <div class="book-footer">  
+          <div class="book-footer">
             <% if @current_user.admin == false %>
               <%= form_tag("/books/#{@book.id}/rental") do %>
                 <input type="submit" value="かりる">

@@ -68,8 +68,8 @@ class ApplicationController < ActionController::Base
   end
 
   def upload_file_sanitize(path)
-    if File.size(path) > 1
-      return "ファイルサイズが大きすぎます"
+    if File.size(path) > 1000000
+      res = "ファイルサイズが大きすぎます"
     else
       File.open(path, 'rb') do |f|
         begin
@@ -77,7 +77,7 @@ class ApplicationController < ActionController::Base
           f.seek(-12, IO::SEEK_END)
           footer = f.read(12)
         rescue
-          return "画像ファイルの登録に失敗しました"
+          res = "画像ファイルの登録に失敗しました"
         end
 
         if header[0, 2].unpack('H*') == %w(ffd8) && footer[-2, 2].unpack('H*') == %w(ffd9) ||\
@@ -85,12 +85,11 @@ class ApplicationController < ActionController::Base
           header[0, 8].unpack('H*') == %w(89504e470d0a1a0a) && footer[-12,12].unpack('H*') == %w(0000000049454e44ae426082)
           return nil
         else
-          puts "file error"
-          return "画像ファイルの登録に失敗しました"
+          res = "画像ファイルの登録に失敗しました"
         end
       end
     end
-
+    return res
   end
 
   def book_find_by_id

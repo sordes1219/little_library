@@ -4,12 +4,14 @@
     <ul class="user-tabs">
       <li class="<%= "active" if @status=="rental" %>"><%= link_to("かりているほん","/users/#{@user_id}/rental") %></li>
       <li class="<%= "active" if @status=="putback" %>"><%= link_to("かえしたほん","/users/#{@user_id}/putback") %></li>
-    </ul> 
+    </ul>
     <% @histories.each do |history| %>
       <% book = Book.find_by(id: history.book_id) %>
       <div class="users-index-item">
         <div class="user-left">
-          <img src="<%= "/book_images/#{book.image_url}" %>">
+          <% if book.image_url %>
+            <%= image_tag("book_images/#{book.image_url}") %>
+          <% end %>
         </div>
         <div class="user-right">
           <%= link_to(book.name, "/books/#{book.id}") %>

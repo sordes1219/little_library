@@ -37,30 +37,33 @@ class UsersController < ApplicationController
   def signup
     @user = User.new(name: @name,group: @group,email: @email,password: @password,admin: false)
 
-    if params[:image]
-      image = params[:image]
-      image_url = "#{@user.id}.jpg"
-      File.binwrite("public/user_images/#{image_url}",image.read)
-      res = upload_file_sanitize("public/user_images/#{image_url}")
-      if !res
-        @user.image_url = image_url
-        if @user.save
-          flash[:notice] = "ユーザ登録しました"
-          redirect_to("/users/#{@group}/index")
+    if @user.save
+      if params[:image]
+        image = params[:image]
+        image_url = "#{@user.id}.jpg"
+        path = "app/assets/images/user_images/#{image_url}"
+        File.binwrite(path,image.read)
+        res = upload_file_sanitize(path)
+        if !res
+          @user.image_url = image_url
+          if @user.save
+            flash[:notice] = "ユーザ登録しました"
+            redirect_to("/users/#{@group}/index")
+          else
+            File.delete(path)
+            render("users/signup_form")
+          end
         else
+          flash[:notice] = res
+          File.delete(path)
           render("users/signup_form")
         end
       else
-        flash[:notice] = res
-        render("users/signup_form")
-      end
-    else
-      if @user.save
         flash[:notice] = "ユーザ登録しました"
         redirect_to("/users/#{@group}/index")
-      else
-        render("users/signup_form")
       end
+    else
+      render("users/signup_form")
     end
 
   end
@@ -78,39 +81,42 @@ class UsersController < ApplicationController
     @user.email = @email
     @user.password = @password
 
-    if params[:image]
-      image = params[:image]
-      image_url = "#{@user.id}.jpg"
-      File.binwrite("public/user_images/#{image_url}",image.read)
-      res = upload_file_sanitize("public/user_images/#{image_url}")
-      if !res
-        @user.image_url = image_url
-        if @user.save
-          flash[:notice] = "ユーザ登録しました"
-          redirect_to("/users/#{@group}/index")
+    if @user.save
+      if params[:image]
+        image = params[:image]
+        image_url = "#{@user.id}.jpg"
+        path = "app/assets/images/user_images/#{image_url}"
+        File.binwrite(path,image.read)
+        res = upload_file_sanitize(path)
+        if !res
+          @user.image_url = image_url
+          if @user.save
+            flash[:notice] = "ユーザ情報を更新しました"
+            redirect_to("/users/#{@group}/index")
+          else
+            File.delete(path)
+            render("users/signup_form")
+          end
         else
+          flash[:notice] = res
+          File.delete(path)
           render("users/signup_form")
         end
       else
-        flash[:notice] = res
-        render("users/signup_form")
+        flash[:notice] = "ユーザ情報を更新しました"
+        redirect_to("/users/#{@group}/index")
       end
     else
-      if @user.save
-        flash[:notice] = "ユーザ登録しました"
-        redirect_to("/users/#{@group}/index")
-      else
-        render("users/signup_form")
-      end
+      render("users/signup_form")
     end
-    
+
   end
 
   def delete
     histories = History.where(user_id: [@user_id])
     group = @user.group
     if @user.image_url
-      File.delete("public/user_images/#{@user.image_url}")
+      File.delete("app/assets/images/user_images/#{@user.image_url}")
     end
     if @user.delete && histories.delete_all
       flash[:notice] = "ユーザを削除しました"

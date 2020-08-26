@@ -55,30 +55,33 @@ class BooksController < ApplicationController
   def signup
     @book = Book.new(name: @name,content: @content)
 
-    if params[:image]
-      image = params[:image]
-      image_url = "#{@book.id}.jpg"
-      File.binwrite("public/book_images/#{image_url}",image.read)
-      res = upload_file_sanitize("public/book_images/#{image_url}")
-      if !res
-        @book.image_url = image_url
-        if @book.save
-          flash[:notice] = "本を登録しました"
-          redirect_to("/books/putback/index")
+    if @book.save
+      if params[:image]
+        image = params[:image]
+        image_url = "#{@book.id}.jpg"
+        path = "app/assets/images/book_images/#{image_url}"
+        File.binwrite(path,image.read)
+        res = upload_file_sanitize(path)
+        if !res
+          @book.image_url = image_url
+          if @book.save
+            flash[:notice] = "本を登録しました"
+            redirect_to("/books/putback/index")
+          else
+            File.delete(path)
+            render("books/signup_form")
+          end
         else
+          flash[:notice] = res
+          File.delete(path)
           render("books/signup_form")
         end
       else
-        flash[:notice] = res
-        render("books/signup_form")
-      end
-    else
-      if @book.save
         flash[:notice] = "本を登録しました"
         redirect_to("/books/putback/index")
-      else
-        render("books/signup_form")
       end
+    else
+      render("books/signup_form")
     end
 
   end
@@ -92,30 +95,33 @@ class BooksController < ApplicationController
     @book.name = @name
     @book.content = @content
 
-    if params[:image]
-      image = params[:image]
-      image_url = "#{@book.id}.jpg"
-      File.binwrite("public/book_images/#{image_url}",image.read)
-      res = upload_file_sanitize("public/book_images/#{image_url}")
-      if !res
-        @book.image_url = image_url
-        if @book.save
-          flash[:notice] = "本を登録しました"
-          redirect_to("/books/putback/index")
+    if @book.save
+      if params[:image]
+        image = params[:image]
+        image_url = "#{@book.id}.jpg"
+        path = "app/assets/images/book_images/#{image_url}"
+        File.binwrite(path,image.read)
+        res = upload_file_sanitize(path)
+        if !res
+          @book.image_url = image_url
+          if @book.save
+            flash[:notice] = "本の情報を更新しました"
+            redirect_to("/books/putback/index")
+          else
+            File.delete(path)
+            render("books/signup_form")
+          end
         else
+          flash[:notice] = res
+          File.delete(path)
           render("books/signup_form")
         end
       else
-        flash[:notice] = res
-        render("books/signup_form")
+        flash[:notice] = "本の情報を更新しました"
+        redirect_to("/books/putback/index")
       end
     else
-      if @book.save
-        flash[:notice] = "本を登録しました"
-        redirect_to("/books/putback/index")
-      else
-        render("books/signup_form")
-      end
+      render("books/signup_form")
     end
 
   end
@@ -123,7 +129,7 @@ class BooksController < ApplicationController
   def delete
     histories = History.where(book_id: [@book_id])
     if @book.image_url
-      File.delete("public/book_images/#{@book.image_url}")
+      File.delete("app/assets/images/book_images/#{@book.image_url}")
     end
     if @book.delete && histories.delete_all
       flash[:notice] = "本の情報を削除しました"

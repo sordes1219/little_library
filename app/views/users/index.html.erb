@@ -8,11 +8,13 @@
       <li class="<%= "active" if @group == "soyokaze" %>"><%= link_to("そよかぜ","/users/soyokaze/index") %></li>
       <li class="<%= "active" if @group == "futaba" %>"><%= link_to("ふたば","/users/futaba/index") %></li>
       <li class="<%= "active" if @group == "daichi" %>"><%= link_to("だいち","/users/daichi/index") %></li>
-    </ul> 
+    </ul>
     <% @users.each do |user| %>
       <div class="users-index-item">
         <div class="user-left">
-          <img src="<%= "/user_images/#{user.image_url}" %>">
+          <% if user.image_url %>
+            <%= image_tag("user_images/#{user.image_url}") %>
+          <% end %>
         </div>
         <div class="user-right">
           <%= link_to(user.name, "/users/#{user.id}/rental") %>
