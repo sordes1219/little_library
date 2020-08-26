@@ -1,11 +1,12 @@
 class BooksController < ApplicationController
-  
+
   before_action :authenticate_user
-  before_action :book_params_sanitize,{only:[:update]}
+  before_action :book_params_sanitize,{only:[:update,:signup]}
   before_action :book_status_sanitize,{only:[:index]}
   before_action :book_id_sanitize,{only:[:show,:rental,:putback,:update_form,:update,:delete]}
   before_action :book_find_by_id,{only:[:show,:rental,:putback,:update_form,:update,:delete]}
-  
+  # before_action :upload_file_sanitize,{only:[:update,:signup]}
+
   def index
     book_id_list = []
     histories = History.where(status: "rental")
@@ -18,10 +19,10 @@ class BooksController < ApplicationController
       @books = Book.where.not(id: [book_id_list])
     end
   end
-  
+
   def show
   end
-  
+
   def rental
     if History.find_by(book_id: @book_id,status:"rental")
       flash[:notice] = "このほんは、かしだしちゅうです"
@@ -33,7 +34,7 @@ class BooksController < ApplicationController
       redirect_to("/users/#{@current_user.id}/rental")
     end
   end
-  
+
   def putback
     history = History.find_by(user_id: @current_user.id,book_id: @book_id,status:"rental")
     if history
@@ -46,51 +47,79 @@ class BooksController < ApplicationController
       redirect_to("/books/#{@book_id}")
     end
   end
-  
+
   def signup_form
     @book = Book.new
   end
 
   def signup
-    @name = params[:name]
-    @content = params[:content]
     @book = Book.new(name: @name,content: @content)
-    if @book.save
-      if params[:image]
-        image = params[:image]
-        image_url = "#{@book.id}.jpg"
-        File.binwrite("public/book_images/#{image_url}",image.read)
+
+    if params[:image]
+      image = params[:image]
+      image_url = "#{@book.id}.jpg"
+      File.binwrite("public/book_images/#{image_url}",image.read)
+      res = upload_file_sanitize("public/book_images/#{image_url}")
+      if !res
         @book.image_url = image_url
-        @book.save
+        if @book.save
+          flash[:notice] = "本を登録しました"
+          redirect_to("/books/putback/index")
+        else
+          render("books/signup_form")
+        end
+      else
+        flash[:notice] = res
+        render("books/signup_form")
       end
-      flash[:notice] = "本を登録しました"
-      redirect_to("/books/putback/index")
     else
-      render("/books/signup_form")
+      if @book.save
+        flash[:notice] = "本を登録しました"
+        redirect_to("/books/putback/index")
+      else
+        render("books/signup_form")
+      end
     end
+
   end
-  
+
   def update_form
     @name = @book.name
     @content = @book.content
   end
-  
+
   def update
     @book.name = @name
     @book.content = @content
-    if @book.save
-      if params[:image]
-        image = params[:image]
-        image_url = "#{@book.id}.jpg"
-        File.binwrite("public/book_images/#{image_url}",image.read)
+
+    if params[:image]
+      image = params[:image]
+      image_url = "#{@book.id}.jpg"
+      File.binwrite("public/book_images/#{image_url}",image.read)
+      res = upload_file_sanitize("public/book_images/#{image_url}")
+      if !res
+        @book.image_url = image_url
+        if @book.save
+          flash[:notice] = "本を登録しました"
+          redirect_to("/books/putback/index")
+        else
+          render("books/signup_form")
+        end
+      else
+        flash[:notice] = res
+        render("books/signup_form")
       end
-      flash[:notice] = "本の情報を更新しました"
-      redirect_to("/books/putback/index")
     else
-      render("books/update_form")
+      if @book.save
+        flash[:notice] = "本を登録しました"
+        redirect_to("/books/putback/index")
+      else
+        render("books/signup_form")
+      end
     end
+
   end
-  
+
   def delete
     histories = History.where(book_id: [@book_id])
     if @book.image_url
@@ -104,5 +133,5 @@ class BooksController < ApplicationController
       redirect_to("/books/putback/index")
     end
   end
-  
+
 end
