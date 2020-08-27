@@ -7,7 +7,6 @@ class UsersController < ApplicationController
   before_action :user_group_sanitize,{only:[:signup,:update,:index]}
   before_action :book_status_sanitize,{only:[:book_status]}
   before_action :user_find_by_id,{only:[:update_form,:update,:delete]}
-  # before_action :upload_file_sanitize,{only:[:signup,:update]}
 
   def login_form
   end
@@ -95,19 +94,19 @@ class UsersController < ApplicationController
             redirect_to("/users/#{@group}/index")
           else
             File.delete(path)
-            render("users/signup_form")
+            render("users/update_form")
           end
         else
           flash[:notice] = res
           File.delete(path)
-          render("users/signup_form")
+          render("users/update_form")
         end
       else
         flash[:notice] = "ユーザ情報を更新しました"
         redirect_to("/users/#{@group}/index")
       end
     else
-      render("users/signup_form")
+      render("users/update_form")
     end
 
   end

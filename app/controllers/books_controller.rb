@@ -5,7 +5,6 @@ class BooksController < ApplicationController
   before_action :book_status_sanitize,{only:[:index]}
   before_action :book_id_sanitize,{only:[:show,:rental,:putback,:update_form,:update,:delete]}
   before_action :book_find_by_id,{only:[:show,:rental,:putback,:update_form,:update,:delete]}
-  # before_action :upload_file_sanitize,{only:[:update,:signup]}
 
   def index
     book_id_list = []
@@ -109,19 +108,19 @@ class BooksController < ApplicationController
             redirect_to("/books/putback/index")
           else
             File.delete(path)
-            render("books/signup_form")
+            render("books/update_form")
           end
         else
           flash[:notice] = res
           File.delete(path)
-          render("books/signup_form")
+          render("books/update_form")
         end
       else
         flash[:notice] = "本の情報を更新しました"
         redirect_to("/books/putback/index")
       end
     else
-      render("books/signup_form")
+      render("books/update_form")
     end
 
   end
