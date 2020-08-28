@@ -58,12 +58,13 @@ class BooksController < ApplicationController
       if params[:image]
         image = params[:image]
         image_url = "#{@book.id}.jpg"
-        path = "app/assets/images/book_images/#{image_url}"
+        path = "app/assets/images/temporary/book_images/#{image_url}"
         File.binwrite(path,image.read)
         res = upload_file_sanitize(path)
         if !res
           @book.image_url = image_url
           if @book.save
+            FileUtils.mv(path,"app/assets/images/book_images/#{image_url}")
             flash[:notice] = "本を登録しました"
             redirect_to("/books/putback/index")
           else
@@ -73,7 +74,7 @@ class BooksController < ApplicationController
         else
           flash[:notice] = res
           File.delete(path)
-          render("books/signup_form")
+          redirect_to("/books/putback/index")
         end
       else
         flash[:notice] = "本を登録しました"
@@ -98,12 +99,13 @@ class BooksController < ApplicationController
       if params[:image]
         image = params[:image]
         image_url = "#{@book.id}.jpg"
-        path = "app/assets/images/book_images/#{image_url}"
+        path = "app/assets/images/temporary/book_images/#{image_url}"
         File.binwrite(path,image.read)
         res = upload_file_sanitize(path)
         if !res
           @book.image_url = image_url
           if @book.save
+            FileUtils.mv(path,"app/assets/images/book_images/#{image_url}")
             flash[:notice] = "本の情報を更新しました"
             redirect_to("/books/putback/index")
           else
@@ -113,14 +115,14 @@ class BooksController < ApplicationController
         else
           flash[:notice] = res
           File.delete(path)
-          render("books/update_form")
+          redirect_to("/books/putback/index")
         end
       else
         flash[:notice] = "本の情報を更新しました"
         redirect_to("/books/putback/index")
       end
     else
-      render("books/update_form")
+      render("books/putback/index")
     end
 
   end

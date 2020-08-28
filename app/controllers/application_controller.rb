@@ -14,6 +14,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authenticate_admin_user
+    if @current_user.admin != true
+      flash[:notice] = "閲覧権限がありません"
+      redirect_to("/books/putback/index")
+    end
+  end
+
+  def authenticate_correct_user
+    if @current_user.admin != true && @current_user.id != @user_id.to_i
+      flash[:notice] = "閲覧権限がありません"
+      redirect_to("/books/putback/index")
+    end
+  end
+
   def forbid_login_user
     if @current_user != nil
       flash[:notice] = "すでにログインしています"

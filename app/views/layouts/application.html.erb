@@ -6,7 +6,7 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
   </head>
 
@@ -53,16 +53,19 @@
           <li>
             <%= link_to("ログイン","/login") %>
           </li>
+          <li>
+            <%= link_to("ユーザ登録","/users/signup") %>
+          </li>
         </ul>
       <% end %>
     </header>
-    
+
     <% if flash[:notice] %>
       <div class="flash">
         <%= flash[:notice] %>
       </div>
     <% end %>
-    
+
     <%= yield %>
   </body>
 </html>
