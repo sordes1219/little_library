@@ -36,7 +36,10 @@
       <% elsif @current_user && @current_user.admin != true%>
         <ul class="header-menus">
           <li>
-            <%= link_to(@current_user.name,"/users/#{@current_user.id}/putback") %>
+            <%= link_to(@current_user.name,"/users/#{@current_user.id}/update") %>
+          </li>
+          <li>
+            <%= link_to("りようりれき","/users/#{@current_user.id}/putback") %>
           </li>
           <li>
             <%= link_to("かりる","/books/putback/index") %>

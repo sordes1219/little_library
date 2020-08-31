@@ -64,11 +64,16 @@ class UsersController < ApplicationController
         else
           flash[:notice] = res
           File.delete(path)
-          redirect_to("/users/#{@group}/index")
+          render("users/signup_form")
         end
       else
         flash[:notice] = "ユーザ登録しました"
-        redirect_to("/users/#{@group}/index")
+        if @current_user == nil
+          session[:user_id] = @user.id
+          redirect_to("/books/putback/index")
+        elsif @current_user.admin == true
+          redirect_to("/users/#{@group}/index")
+        end
       end
     else
       render("users/signup_form")
@@ -84,39 +89,49 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.name = @name
-    @user.group = @group
-    @user.email = @email
-    @user.password = @password
+    if params[:btn] == "削除"
+      delete
+    else
+      @user.name = @name
+      @user.group = @group
+      @user.email = @email
+      @user.password = @password
 
-    if @user.save
-      if params[:image]
-        image = params[:image]
-        image_url = "#{@user.id}.jpg"
-        path = "app/assets/images/temporary/user_images/#{image_url}"
-        File.binwrite(path,image.read)
-        res = upload_file_sanitize(path)
-        if !res
-          @user.image_url = image_url
-          if @user.save
-            FileUtils.mv(path,"app/assets/images/user_images/#{image_url}")
-            flash[:notice] = "ユーザ情報を更新しました"
-            redirect_to("/users/#{@group}/index")
+      if @user.save
+        if params[:image]
+          image = params[:image]
+          image_url = "#{@user.id}.jpg"
+          path = "app/assets/images/temporary/user_images/#{image_url}"
+          File.binwrite(path,image.read)
+          res = upload_file_sanitize(path)
+          if !res
+            @user.image_url = image_url
+            if @user.save
+              FileUtils.mv(path,"app/assets/images/user_images/#{image_url}")
+              flash[:notice] = "ユーザ情報を更新しました"
+              if @current_user.admin != true
+                render("users/update_form")
+              else
+                redirect_to("/users/#{@group}/index")
+              end
+            else
+              File.delete(path)
+              render("users/update_form")
+            end
           else
+            flash[:notice] = res
             File.delete(path)
             render("users/update_form")
           end
         else
-          flash[:notice] = res
-          File.delete(path)
-          redirect_to("/users/#{@group}/index")
+          flash[:notice] = "ユーザ情報を更新しました"
+          if @current_user.admin != true
+            render("users/update_form")
+          else
+            redirect_to("/users/#{@group}/index")
+          end
         end
-      else
-        flash[:notice] = "ユーザ情報を更新しました"
-        redirect_to("/users/#{@group}/index")
       end
-    else
-      render("users/update_form")
     end
 
   end
@@ -129,20 +144,23 @@ class UsersController < ApplicationController
     end
     if @user.delete && histories.delete_all
       flash[:notice] = "ユーザを削除しました"
-      redirect_to("/users/#{group}/index")
+      if @current_user.admin == true
+        redirect_to("/users/#{group}/index")
+      else
+        session[:user_id] = nil
+        redirect_to("/login")
+      end
     else
       flash[:notice] = "ユーザを削除できませんでした"
-      redirect_to("/users/#{group}/index")
+      if @current_user.admin == true
+        redirect_to("/users/#{group}/index")
+      else
+        render("users/update_form")
+      end
     end
   end
 
   def book_status
-    # if @current_user.admin == true || @current_user.id == @user_id.to_i
-    #   @histories = History.where(user_id: [@user_id],status: [@status])
-    # else
-    #   flash[:notice] = "閲覧権限がありません"
-    #   @histories = []
-    # end
     @histories = History.where(user_id: [@user_id],status: [@status])
   end
 
