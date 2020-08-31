@@ -36,6 +36,9 @@
       <% elsif @current_user && @current_user.admin != true%>
         <ul class="header-menus">
           <li>
+            <%= image_tag("user_images/#{@current_user.image_url}") %>
+          </li>
+          <li>
             <%= link_to(@current_user.name,"/users/#{@current_user.id}/update") %>
           </li>
           <li>
