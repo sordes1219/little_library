@@ -1,29 +1,45 @@
-<div class="main users-index">
+<section class="bg-light py-3 py-md-5">
   <div class="container">
-    <h1 class="users-heading">ユーザ一覧</h1>
-    <ul class="user-tabs">
-      <li class="<%= "active" if @group == "taiyo" %>"><%= link_to("たいよう","/users/taiyo/index") %></li>
-      <li class="<%= "active" if @group == "sora" %>"><%= link_to("そら","/users/sora/index") %></li>
-      <li class="<%= "active" if @group == "umi" %>"><%= link_to("うみ","/users/umi/index") %></li>
-      <li class="<%= "active" if @group == "soyokaze" %>"><%= link_to("そよかぜ","/users/soyokaze/index") %></li>
-      <li class="<%= "active" if @group == "futaba" %>"><%= link_to("ふたば","/users/futaba/index") %></li>
-      <li class="<%= "active" if @group == "daichi" %>"><%= link_to("だいち","/users/daichi/index") %></li>
-    </ul>
-    <% @users.each do |user| %>
-      <div class="users-index-item">
-        <div class="user-left">
-          <% if user.image_url %>
-            <%= image_tag("user_images/#{user.image_url}") %>
-          <% end %>
-        </div>
-        <div class="user-right">
-          <%= link_to(user.name, "/users/#{user.id}/rental") %>
-          <div class="user-right-right">
-            <%= link_to('編集', "/users/#{user.id}/update") %>
-            <%= link_to('削除', "/users/#{user.id}/delete",{method: "post"}) %>
+    <div class="heading">ユーザ一覧</div>
+    <div class="user-index">
+      <ul class="user-tabs">
+        <div class="row row-cols-3 row-cols-md-6 mr-0 ml-0">
+          <div class="col pr-0 pl-0">
+            <li class="<%= "active" if @group == "taiyo" %>"><%= link_to("たいよう","/users/taiyo/index") %></li>
+          </div>
+          <div class="col pr-0 pl-0">
+            <li class="<%= "active" if @group == "sora" %>"><%= link_to("そら","/users/sora/index") %></li>
+          </div>
+          <div class="col pr-0 pl-0">
+            <li class="<%= "active" if @group == "umi" %>"><%= link_to("うみ","/users/umi/index") %></li>
+          </div>
+          <div class="col pr-0 pl-0">
+            <li class="<%= "active" if @group == "soyokaze" %>"><%= link_to("そよかぜ","/users/soyokaze/index") %></li>
+          </div>
+          <div class="col pr-0 pl-0">
+            <li class="<%= "active" if @group == "futaba" %>"><%= link_to("ふたば","/users/futaba/index") %></li>
+          </div>
+          <div class="col pr-0 pl-0">
+            <li class="<%= "active" if @group == "daichi" %>"><%= link_to("だいち","/users/daichi/index") %></li>
           </div>
         </div>
-      </div>
-    <% end %>
+      </ul>
+      <% @users.each do |user| %>
+        <div class="users-index-item">
+          <div class="user-left">
+            <% if user.image_url %>
+              <%= image_tag("user_images/#{user.image_url}") %>
+            <% end %>
+          </div>
+          <div class="user-right">
+            <%= link_to(user.name, "/users/#{user.id}/rental") %>
+            <div class="user-right-right">
+              <%= link_to('編集', "/users/#{user.id}/update") %>
+              <%= link_to('削除', "/users/#{user.id}/delete",{method: "post"}) %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
-</div>
+</section>

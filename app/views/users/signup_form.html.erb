@@ -1,6 +1,6 @@
-<div class="main">
+<section class="bg-light py-3 py-md-5">
   <div class="container">
-    <div class="form-heading">ユーザ登録</div>
+    <div class="heading">ユーザ登録</div>
     <div class="form">
       <div class="form-body">
         <% if @user.errors.full_messages %>
@@ -27,8 +27,8 @@
           <p>画像</p>
           <input name="image" type="file">
           <input type="submit" value="新規登録">
-        <% end %>    
+        <% end %>
       </div>
     </div>
   </div>
-</div>
+</section>

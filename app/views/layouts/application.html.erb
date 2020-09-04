@@ -4,67 +4,83 @@
     <title>LittleLibrary</title>
     <%= csrf_meta_tags %>
 
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Googlefont CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
-    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
   </head>
 
   <body>
-    <header>
-      <div class="header-logo">
-        <%= link_to("LittleLibrary","/") %>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="/">LittleLibrary</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <% if @current_user && @current_user.admin == true %>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <%= link_to("ユーザ登録","/users/signup",{class: "nav-link"}) %>
+            </li>
+            <li class="nav-item">
+              <%= link_to("ユーザ一覧","/users/taiyo/index",{class: "nav-link"}) %>
+            </li>
+            <li class="nav-item">
+              <%= link_to("本の登録","/books/signup",{class: "nav-link"}) %>
+            </li>
+            <li class="nav-item">
+              <%= link_to("本の一覧","/books/putback/index",{class: "nav-link"}) %>
+            </li>
+            <li class="nav-item">
+              <%= link_to("ログアウト","/logout", {method: "post",class: "nav-link"}) %>
+            </li>
+          </ul>
+        <% elsif @current_user && @current_user.admin != true %>
+          <ul class="navbar-nav ml-auto">
+            <!-- <li class="nav-item">
+              <%= image_tag("user_images/#{@current_user.image_url}",{class: "nav-link"}) %>
+            </li> -->
+            <!-- <li>
+              <%= link_to(@current_user.name,"/users/#{@current_user.id}/update") %>
+            </li> -->
+            <li class="nav-item">
+              <%= link_to("りようりれき","/users/#{@current_user.id}/putback",{class: "nav-link"}) %>
+            </li>
+            <li class="nav-item">
+              <%= link_to("かりる","/books/putback/index",{class: "nav-link"}) %>
+            </li>
+            <li class="nav-item">
+              <%= link_to("かえす","/users/#{@current_user.id}/rental",{class: "nav-link"}) %>
+            </li>
+            <li class="nav-item">
+              <%= link_to("ログアウト","/logout", {method: "post",class: "nav-link"}) %>
+            </li>
+          </ul>
+        <% else %>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <%= link_to("ログイン","/login",{class: "nav-link"}) %>
+            </li>
+            <li class="nav-item">
+              <%= link_to("ユーザ登録","/users/signup",{class: "nav-link"}) %>
+            </li>
+            <li class="nav-item">
+              <%= link_to("利用規約","#",{class: "nav-link"}) %>
+            </li>
+          </ul>
+        <% end %>
       </div>
-      <% if @current_user && @current_user.admin == true %>
-        <ul class="header-menus">
-          <li>
-            <%= link_to("ユーザ登録","/users/signup") %>
-          </li>
-          <li>
-            <%= link_to("ユーザ一覧","/users/taiyo/index") %>
-          </li>
-          <li>
-            <%= link_to("本の登録","/books/signup") %>
-          </li>
-          <li>
-            <%= link_to("本の一覧","/books/putback/index") %>
-          </li>
-          <li>
-            <%= link_to("ログアウト","/logout", {method: "post"}) %>
-          </li>
-        </ul>
-      <% elsif @current_user && @current_user.admin != true%>
-        <ul class="header-menus">
-          <li>
-            <%= image_tag("user_images/#{@current_user.image_url}") %>
-          </li>
-          <li>
-            <%= link_to(@current_user.name,"/users/#{@current_user.id}/update") %>
-          </li>
-          <li>
-            <%= link_to("りようりれき","/users/#{@current_user.id}/putback") %>
-          </li>
-          <li>
-            <%= link_to("かりる","/books/putback/index") %>
-          </li>
-          <li>
-            <%= link_to("かえす","/users/#{@current_user.id}/rental") %>
-          </li>
-          <li>
-            <%= link_to("ログアウト","/logout", {method: "post"}) %>
-          </li>
-        </ul>
-      <% else %>
-        <ul class="header-menus">
-          <li>
-            <%= link_to("ログイン","/login") %>
-          </li>
-          <li>
-            <%= link_to("ユーザ登録","/users/signup") %>
-          </li>
-        </ul>
-      <% end %>
-    </header>
+    </nav>
 
     <% if flash[:notice] %>
       <div class="flash">
@@ -73,5 +89,11 @@
     <% end %>
 
     <%= yield %>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
   </body>
 </html>

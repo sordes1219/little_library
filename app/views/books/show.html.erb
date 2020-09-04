@@ -1,32 +1,33 @@
-<div class="main book-show">
+<section class="bg-light py-3 py-md-5">
   <div class="container">
-    <h1 class="books-heading">どんなほん？</h1>
+    <div class="heading">どんなほん？</div>
     <div class="book">
       <div class="books-show-item">
-        <div class="book-left">
-          <% if @book.image_url %>
-            <%= image_tag("book_images/#{@book.image_url}") %>
-          <% end %>
-        </div>
-        <div class="book-right">
-          <div class="book-title">
-            <h2><%= @book.name %></h2>
-          </div>
-          <div class="book-content">
-            <p><%= @book.content %></p>
-          </div>
-          <div class="book-footer">
-            <% if @current_user.admin == false %>
-              <%= form_tag("/books/#{@book.id}/rental") do %>
-                <input type="submit" value="かりる">
+        <div class="row row-cols-1 row-cols-md-2">
+            <div class="col mb-5">
+              <% if @book.image_url %>
+                <%= image_tag("book_images/#{@book.image_url}",{class:"book-image"}) %>
               <% end %>
-              <%= form_tag("/books/#{@book.id}/putback") do %>
-                <input type="submit" value="かえす">
-              <% end %>
-            <% end %>
-          </div>
+            </div>
+            <div class="col">
+              <div class="book-title">
+                <h2><%= @book.name %></h2>
+              </div>
+              <div class="book-content">
+                <p><%= @book.content %></p>
+              </div>
+              <div class="book-footer">
+                <% if @current_user.admin == false %>
+                  <%= form_tag("/books/#{@book.id}/rental") do %>
+                    <input type="submit" class="mr-2" value="かりる">
+                  <% end %>
+                  <%= form_tag("/books/#{@book.id}/putback") do %>
+                    <input type="submit" class="ml-2" value="かえす">
+                  <% end %>
+                <% end %>
+            </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>

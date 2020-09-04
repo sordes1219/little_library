@@ -1,9 +1,15 @@
-<div class="main users-index">
+<section class="bg-light py-3 py-md-5">
   <div class="container">
-    <h1 class="users-heading">りようりれき</h1>
+    <div class="heading">りようりれき</div>
     <ul class="user-tabs">
-      <li class="<%= "active" if @status=="rental" %>"><%= link_to("かりているほん","/users/#{@user_id}/rental") %></li>
-      <li class="<%= "active" if @status=="putback" %>"><%= link_to("かえしたほん","/users/#{@user_id}/putback") %></li>
+      <div class="row mr-0 ml-0">
+        <div class="col-6 pr-0 pl-0">
+          <li class="<%= "active" if @status=="rental" %>"><%= link_to("かりているほん","/users/#{@user_id}/rental") %></li>
+        </div>
+        <div class="col-6 pr-0 pl-0">
+          <li class="<%= "active" if @status=="putback" %>"><%= link_to("かえしたほん","/users/#{@user_id}/putback") %></li>
+        </div>
+      </div>
     </ul>
     <% @histories.each do |history| %>
       <% book = Book.find_by(id: history.book_id) %>
@@ -27,4 +33,4 @@
       </div>
     <% end %>
   </div>
-</div>
+</section>

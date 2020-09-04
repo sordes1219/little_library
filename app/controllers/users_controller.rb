@@ -1,14 +1,14 @@
 class UsersController < ApplicationController
 
   before_action :authenticate_user,{only:[:logout,:update_form,:update,:delete,:book_status,:index]}
-  before_action :authenticate_admin_user,{only:[:index]}
+  before_action :authenticate_admin_user,{only:[:index,:update_form,:update,:delete]}
   before_action :forbid_login_user,{only:[:login,:login_form]}
   before_action :user_params_sanitize,{only:[:login,:signup,:update]}
   before_action :user_id_sanitize,{only:[:update_form,:update,:delete,:book_status]}
   before_action :user_group_sanitize,{only:[:signup,:update,:index]}
   before_action :book_status_sanitize,{only:[:book_status]}
   before_action :user_find_by_id,{only:[:update_form,:update,:delete]}
-  before_action :authenticate_correct_user,{only:[:book_status,:update_form,:update,:delete]}
+  before_action :authenticate_correct_user,{only:[:book_status]}
 
 
   def login_form

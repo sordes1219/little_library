@@ -1,9 +1,15 @@
-<div class="main users-index">
+<section class="bg-light py-3 py-md-5">
   <div class="container">
-    <h1 class="users-heading">どれをかりる？</h1>
+    <div class="heading">どれをかりる？</div>
     <ul class="user-tabs">
-      <li class="<%= "active" if @status=="putback" %>" ><%= link_to("かりられる","/books/putback/index") %></li>
-      <li class="<%= "active" if @status=="rental" %>" ><%= link_to("かしだしちゅう","/books/rental/index") %></li>
+      <div class="row mr-0 ml-0">
+        <div class="col-6 pr-0 pl-0">
+          <li class="<%= "active" if @status=="putback" %>" ><%= link_to("かりられる","/books/putback/index") %></li>
+        </div>
+        <div class="col-6 pr-0 pl-0">
+          <li class="<%= "active" if @status=="rental" %>" ><%= link_to("かしだしちゅう","/books/rental/index") %></li>
+        </div>
+      </div>
     </ul>
     <% @books.each do |book| %>
       <div class="users-index-item">
@@ -20,6 +26,10 @@
                 <p>貸出先：<%= book.rentaler %></p>
                 <p>返却予定日：<%= book.putback_date %></p>
               </div>
+            <% elsif @status == "rental" %>
+              <div class="user-right-bottom">
+                <p>返却予定日：<%= book.putback_date %></p>
+              </div>
             <% end %>
           </div>
             <% if @current_user.admin == true %>
@@ -32,4 +42,4 @@
       </div>
     <% end %>
   </div>
-</div>
+</section>
