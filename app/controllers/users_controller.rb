@@ -168,4 +168,7 @@ class UsersController < ApplicationController
     @users = User.where(group: [@group])
   end
 
+  def terms
+  end
+
 end

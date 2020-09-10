@@ -23,5 +23,6 @@ Rails.application.routes.draw do
   get '/users/:user_id/:status' => 'users#book_status'
   
   get '/' => "home#top"
+  get '/terms' => "users#terms"
   
 end
