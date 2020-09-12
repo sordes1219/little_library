@@ -24,7 +24,7 @@
           <div class="user-right-bottom">
             <% if @status=="rental" %>
               <p>かりたひ： <%= history.updated_at.month %>月<%= history.updated_at.day %>日</p>
-              <p class="<%= "alert" if history.updated_at.advance(days:7) <= Date.today %>">かえすひ： <%= history.updated_at.advance(days:7).month %>月<%= history.updated_at.advance(days:7).day %>日</p>
+              <p class="<%= "text-danger" if history.updated_at.advance(days:7) <= Date.today %>">かえすひ： <%= history.updated_at.advance(days:7).month %>月<%= history.updated_at.advance(days:7).day %>日</p>
             <% else %>
               <p>かえしたひ： <%= history.updated_at.month %>月<%= history.updated_at.day %>日</p>
             <% end %>
